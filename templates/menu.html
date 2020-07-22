@@ -10,20 +10,28 @@
     <ul class="nav navbar-nav">
       {{ if .is_logged_in }}
         <!--Display this link only when the user is logged in-->
-        <li><a href="/article/create">Create Article</a></li>
+        <li><a href="/board/create">Add new board</a></li>
       {{end}} 
       {{ if not .is_logged_in }}
         <!--Display this link only when the user is not logged in-->
-        <li><a href="/u/register">Register</a></li>
+        <li><a href="/register">Register</a></li>
       {{end}} 
       {{ if not .is_logged_in }}
         <!--Display this link only when the user is not logged in-->
-        <li><a href="/u/login">Login</a></li>
+        <li><a href="/login">Login</a></li>
       {{end}} 
       {{ if .is_logged_in }}
         <!--Display this link only when the user is logged in-->
-        <li><a href="/u/logout">Logout</a></li>
+        <li><a href="/logout">Logout</a></li>
       {{end}}
+      <!--Display this link only when the user is logged in-->
+      <li><a href="/user/list">Users</a></li>
+      
+      <!--Display this link only when the user is logged in-->
+      <li><a href="/board/list">Boards</a></li>
+      
+      <!--Display this link only when the user is logged in-->
+      <li><a href="/test/list">Tests</a></li>
     </ul>
   </div>
 </nav>

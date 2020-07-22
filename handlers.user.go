@@ -3,11 +3,15 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"net/http"
 	"strconv"
 
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/golang/glog"
+	"github.com/siro20/boardstatus/pkg/model"
 )
 
 func showLoginPage(c *gin.Context) {
@@ -21,16 +25,27 @@ func performLogin(c *gin.Context) {
 	// Obtain the POSTed username and password values
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+	fmt.Printf("username %s, password %s\n", username, password)
+	user, err := model.GetUserByName(username)
+	if err == nil && user != nil {
+		fmt.Printf("User found\n")
+		v, err := model.UserIsPasswordValid(user, password)
+		if !v || err != nil {
+			fmt.Printf("%v\n", err)
+			// If the username/password combination is invalid,
+			// show the error message on the login page
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{
+				"ErrorTitle":   "Login Failed",
+				"ErrorMessage": "Invalid credentials provided"})
+			return
+		}
+		session := sessions.Default(c)
 
-    var sameSiteCookie http.SameSite;
-
-	// Check if the username/password combination is valid
-	if isUserValid(username, password) {
-		// If the username/password is valid set the token in a cookie
-		token := generateSessionToken()
-		c.SetCookie("token", token, 3600, "", "", sameSiteCookie, false, true)
-		c.Set("is_logged_in", true)
-
+		// populate cookie
+		session.Set("user", username)
+		if err := session.Save(); err != nil {
+			glog.Errorf("Failed to save session: %v", err)
+		}
 		render(c, gin.H{
 			"title": "Successful Login"}, "login-successful.html")
 
@@ -52,10 +67,8 @@ func generateSessionToken() string {
 
 func logout(c *gin.Context) {
 
-    var sameSiteCookie http.SameSite;
-
 	// Clear the cookie
-	c.SetCookie("token", "", -1, "", "", sameSiteCookie, false, true)
+	c.SetCookie("token", "", -1, "", "", false, true)
 
 	// Redirect to the home page
 	c.Redirect(http.StatusTemporaryRedirect, "/")
@@ -72,12 +85,20 @@ func register(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
-    var sameSiteCookie http.SameSite;
+	user, err := model.GetUserByName(username)
+	if user == nil || err != nil {
 
-	if _, err := registerNewUser(username, password); err == nil {
+		c.HTML(http.StatusBadRequest, "register.html", gin.H{
+			"ErrorTitle":   "Registration Failed",
+			"ErrorMessage": "Username already taken"})
+		return
+	} else {
+		user.ApiToken = password
+	}
+	if err := user.InsertIntoDB(); err == nil {
 		// If the user is created, set the token in a cookie and log the user in
 		token := generateSessionToken()
-		c.SetCookie("token", token, 3600, "", "", sameSiteCookie, false, true)
+		c.SetCookie("token", token, 3600, "", "", false, true)
 		c.Set("is_logged_in", true)
 
 		render(c, gin.H{

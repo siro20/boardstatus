@@ -4,10 +4,10 @@
 {{ template "header.html" .}}
 
 <div>
-  <strong>The article was successfully submitted.</strong>
+  <strong>The board was successfully submitted.</strong>
   
-  <!--Display the linked title of the newly created article-->
-  <a href="/article/view/{{.payload.ID}}">{{.payload.Title}}</a>
+  <!--Display the linked title of the newly created board-->
+  <a href="/board/view/{{.payload.ID}}">{{.payload.Name}}</a>
 </div>
     
 <!--Embed the footer.html template at this location-->

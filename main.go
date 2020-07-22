@@ -3,14 +3,36 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/siro20/boardstatus/pkg/model"
 )
 
 var router *gin.Engine
 
 func main() {
+
+	// for testing only
+	u, err := model.GetUserByName("root")
+	if u == nil || err != nil {
+		var newUser model.User = model.User{
+			Username:          "root",
+			Name:              "root",
+			Password:          "root",
+			Email:             "",
+			ProfilePictureURL: "",
+			OAuthProvider:     "",
+		}
+		err := newUser.InsertIntoDB()
+		if err != nil {
+			fmt.Printf("Error inserting user root: %v\n", err)
+		}
+	} else {
+		fmt.Printf("%v\n", u)
+	}
+
 	// Set Gin to production mode
 	gin.SetMode(gin.ReleaseMode)
 

@@ -1,0 +1,58 @@
+<!--list.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+<!--Display the name of the list-->
+<h1>{{.Name}}</h1>
+
+{{ if .DisplayOnly}}
+<table style="width:100%" class="table">
+        <tbody>
+        <tr><th>Name</th><th>Value</th><th>Description</th></tr>
+
+        {{range .payload }}
+
+                {{ if .Title}}
+                        <tr><td colspan="3"><p style="text-align:center;font-weight: bold">{{.Title}}</p></td></tr>
+                {{end}}
+
+                <tr><td>{{.Name}}</td><td>{{.Value}}</td><td>{{.Description}}</td></tr>
+        {{end}}
+        </tbody>
+</table>
+{{end}}
+
+{{ if not .DisplayOnly}}
+<div class="panel panel-default col-sm-12">
+        <div class="panel-body">
+        <!--If there's an error, display the error-->
+        {{ if .ErrorTitle}}
+        <p class="bg-danger">
+        {{.ErrorTitle}}: {{.ErrorMessage}}
+        </p>
+        {{end}}
+        <!--Create a form that POSTs to the `/{{.PostURL}}/create` route-->
+        <form class="form" action="/{{.PostURL}}/create" method="POST">
+
+        {{range .payload }}
+
+                {{ if .Title}}
+                <div class="form-group">
+                        <p style="text-align:center;font-weight: bold">{{.Title}}</p>
+                </div>
+                {{end}}
+                <div class="form-group">
+                        <label for="{{.FormName}}">{{.Name}}</label>
+                        <input type="text" class="form-control" id="{{.FormName}}" name="{{.FormName}}" placeholder="{{.Default}}">
+                </div>
+        
+        {{end}}
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        </div>
+</div>
+{{end}}
+
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

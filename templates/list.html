@@ -1,0 +1,32 @@
+<!--list.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+<!--Display the name of the list-->
+<h1>{{.Name}}</h1>
+
+<table style="width:100%" class="table">
+
+        <thead>
+                <tr>
+                        {{range .header.Value}}
+                                <th>{{ . }}</th>
+                        {{end}}
+                </tr>
+        </thead>
+        <tbody>
+        {{range .payload}}
+                <tr>
+                        {{range .Value}}
+                                <td>{{ . }}</td>
+                        {{end}}
+                        <td><a href="../edit/{{ .ID }}">edit</a></td>
+                        <td><a href="../view/{{ .ID }}">show</a></td>
+                </tr>
+        {{end}}
+        </tbody>
+</table>
+
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

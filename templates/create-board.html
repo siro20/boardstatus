@@ -1,0 +1,89 @@
+<!--create-article.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+<h1>Create new board</h1>
+
+
+<div class="panel panel-default col-sm-12">
+  <div class="panel-body">
+    <!--If there's an error, display the error-->
+    {{ if .ErrorTitle}}
+    <p class="bg-danger">
+      {{.ErrorTitle}}: {{.ErrorMessage}}
+    </p>
+    {{end}}
+    <!--Create a form that POSTs to the `/board/create` route-->
+    <form class="form" action="/board/create" method="POST">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+      </div>
+      <div class="form-group">
+        <label for="manufacturer">Manufacturer</label>
+        <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="ARM Ltd.">
+      </div>
+      <div class="form-group">
+        <label for="product_name">Product Name</label>
+        <input type="text" class="form-control" id="product_name" name="product_name" placeholder="QEMU ARMv7">
+      </div>
+      <div class="form-group">
+        <label for="version">Version</label>
+        <input type="text" class="form-control" id="version" name="version" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="sku">Sku</label>
+        <input type="text" class="form-control" id="sku" name="sku" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="family">Family</label>
+        <input type="text" class="form-control" id="family" name="family" placeholder="">
+      </div>
+
+      <div class="form-group">
+        <label for="board_type">Board Type</label>
+        <input type="text" class="form-control" id="board_type" name="board_type" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="enclosure">Enclosure</label>
+        <input type="text" class="form-control" id="enclosure" name="enclosure" placeholder="">
+      </div>
+
+      <div class="form-group">
+        <label for="northbridge_name">Northbridge Name</label>
+        <input type="text" class="form-control" id="northbridge_name" name="northbridge_name" placeholder="Intel Q35">
+      </div>
+      <div class="form-group">
+        <label for="southbridge_name">Northbridge Name</label>
+        <input type="text" class="form-control" id="southbridge_name" name="southbridge_name" placeholder="Intel ICH9">
+      </div>
+      <div class="form-group">
+        <label for="superio_name">Super I/O</label>
+        <input type="text" class="form-control" id="superio_name" name="superio_name" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="ec_name">Embedded Controller</label>
+        <input type="text" class="form-control" id="ec_name" name="ec_name" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="flash_ic_name">Flash IC</label>
+        <input type="text" class="form-control" id="flash_ic_name" name="flash_ic_name" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="flash_ic_capacity_byte">Flash IC capacity</label>
+        <input type="text" class="form-control" id="flash_ic_capacity_byte" name="flash_ic_capacity_byte" placeholder="0">
+      </div>
+      
+      <div class="form-group">
+        <label for="comment">Comments</label>
+        <textarea name="comment" class="form-control" rows="10" id="comment" placeholder="Additinal comments"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>  
+
+    
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}
